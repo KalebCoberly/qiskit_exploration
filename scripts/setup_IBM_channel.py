@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     QiskitRuntimeService.save_account(
         token=get_ibm_quantum_token(),
+        instance=get_CRN_instance(),
         channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
         set_as_default=True,
     )
