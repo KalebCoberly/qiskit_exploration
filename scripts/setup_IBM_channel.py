@@ -19,7 +19,8 @@ def main() -> None:
     QiskitRuntimeService.save_account(
         token=get_ibm_quantum_token(),
         instance=get_CRN_instance(),
-        channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
+        # channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
+        name="Functions_test-open_plan",
         set_as_default=True,
     )
     print("IBM Quantum Platform channel set up successfully. Testing service ...")
