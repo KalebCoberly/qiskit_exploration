@@ -26,17 +26,27 @@ def main() -> None:
 
     return
 
-
-def get_ibm_quantum_token() -> str:
-    """Get the IBM Quantum API token."""
+def get_key(name: str) -> str:
+    """Get specified key from dotenv file."""
     load_dotenv()
-    key = os.getenv("IBM_QUANTUM_API_TOKEN")
+    key = os.getenv(name)
     if not key:
         raise ValueError(
-            "IBM_QUANTUM_API_TOKEN not found. Set the environment variable."
+            f"{name} not found. Set the environment variable."
         )
 
     return key
+
+
+def get_ibm_quantum_token() -> str:
+    """Get the IBM Quantum API token."""
+    return get_key("IBM_QUANTUM_API_TOKEN")
+
+
+def get_CRN_instance() -> str:
+    """Get the IBM Cloud CRN instance."""
+    return get_key("IBM_CLOUD_CRN_INSTANCE")
+
 
 def test_service() -> None:
     """Test the Qiskit Runtime Service."""
