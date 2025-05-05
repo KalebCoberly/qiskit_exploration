@@ -22,6 +22,7 @@ def main() -> None:
         # channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
         name="Functions_test-open_plan",
         set_as_default=True,
+        overwrite=True,
     )
     print("IBM Quantum Platform channel set up successfully. Testing service ...")
     test_service()
