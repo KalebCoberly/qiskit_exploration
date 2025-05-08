@@ -10,6 +10,7 @@ import logging
 
 from qiskit import QuantumCircuit
 from qiskit_ibm_runtime import QiskitRuntimeService, SamplerV2 as Sampler
+from qiskit_ibm_catalog import QiskitFunctionsCatalog
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,8 +19,17 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     QiskitRuntimeService.save_account(
         token=get_ibm_quantum_token(),
-        channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
+        instance=get_CRN_instance(),
+        # channel="ibm_quantum",  # IBM Quantum Platform channel (vs. IBM Cloud platform).
+        # name="Functions_test-open_plan-runtime_service",
         set_as_default=True,
+        overwrite=True,
+    )
+    QiskitFunctionsCatalog.save_account(
+        token=get_ibm_quantum_token(),
+        # instance=get_CRN_instance(),
+        # name="Functions_test-open_plan-functions_catalog",
+        overwrite=True,
     )
     print("IBM Quantum Platform channel set up successfully. Testing service ...")
     test_service()
@@ -29,14 +39,25 @@ def main() -> None:
 
 def get_ibm_quantum_token() -> str:
     """Get the IBM Quantum API token."""
+    return get_key("IBM_QUANTUM_API_TOKEN")
+
+
+def get_CRN_instance() -> str:
+    """Get the IBM Cloud CRN instance."""
+    return get_key("IBM_CLOUD_CRN_INSTANCE")
+
+
+def get_key(name: str) -> str:
+    """Get specified key from dotenv file."""
     load_dotenv()
-    key = os.getenv("IBM_QUANTUM_API_TOKEN")
+    key = os.getenv(name)
     if not key:
         raise ValueError(
-            "IBM_QUANTUM_API_TOKEN not found. Set the environment variable."
+            f"{name} not found. Set the environment variable."
         )
 
     return key
+
 
 def test_service() -> None:
     """Test the Qiskit Runtime Service."""
@@ -56,9 +77,9 @@ def test_service() -> None:
     job = sampler.run([example_circuit])
     logger.info(f"job id: {job.job_id()}")
 
-    logger.info("Getting the result ...")
-    result = job.result()
-    logger.info(result)
+    logger.info("Testing the Qiskit Functions Catalog ...")
+    catalog = QiskitFunctionsCatalog()
+    logger.info(catalog.list())
 
     return
  
